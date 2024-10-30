@@ -1,7 +1,5 @@
 export function App() {
   return (
-    <>
-      <h1 className="text-2xl text-zinc-700 font-bold">Hello World</h1>
-    </>
+    <div className="w-[1120px] h-[744px] bg-zinc-800 my-20 mx-40 flex flex-col"></div>
   )
 }
