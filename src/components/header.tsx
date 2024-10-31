@@ -1,21 +1,26 @@
-import { HistoryIcon } from './ui/history-icon'
 import { IgniteIcon } from './ui/ignite-icon'
-import { TimerIcon } from './ui/timer-icon'
+import { Timer, Scroll } from '@phosphor-icons/react'
 
 export function Header() {
   return (
-    <header className="flex justify-between my-10 mx-10">
+    <header className="flex justify-between items-center">
       <div>
         <IgniteIcon />
       </div>
-      <div className="flex">
-        <button type="button">
-          <TimerIcon />
-        </button>
-        <button type="button">
-          <HistoryIcon />
-        </button>
-      </div>
+      <nav className="flex gap-2">
+        <a
+          href="/"
+          className="w-12 h-12 flex items-center justify-center text-white border-y-[3px] border-transparent hover:border-b-green-500 active:text-green-500"
+        >
+          <Timer size={24} />
+        </a>
+        <a
+          href="/"
+          className="w-12 h-12 flex items-center justify-center text-white border-y-[3px] border-transparent hover:border-b-green-500 active:text-green-500"
+        >
+          <Scroll size={24} />
+        </a>
+      </nav>
     </header>
   )
 }
