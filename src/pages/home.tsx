@@ -43,7 +43,6 @@ export function Home() {
         <button
           type="submit"
           className="flex items-center justify-center gap-2 bg-green-500 w-full px-10 py-4 text-gray-100 rounded-lg font-bold hover:bg-green-700 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-green-500"
-          disabled
         >
           <Play size={24} />
           Começar
