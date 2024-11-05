@@ -1,6 +1,7 @@
 import { Play } from '@phosphor-icons/react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const createNewCycleForm = z.object({
   task: z.string().min(1, 'Informe o nome da tarefa!'),
@@ -10,23 +11,33 @@ const createNewCycleForm = z.object({
 type createNewCycleForm = z.infer<typeof createNewCycleForm>
 
 export function Home() {
-  const { register, handleSubmit } = useForm<createNewCycleForm>()
-  async function handleCreateNewCycle(data: createNewCycleForm) {
-    console.log(data)
+  const { register, handleSubmit, reset, watch } = useForm<createNewCycleForm>({
+    resolver: zodResolver(createNewCycleForm),
+  })
+  async function handleCreateNewCycle({
+    task,
+    minutesAmount,
+  }: createNewCycleForm) {
+    console.log(task, minutesAmount)
+    reset()
   }
+
+  const task = watch('task')
+  const isSubmitDisabled = !task
+
   return (
     <div className="flex-1 flex-col items-center justify-center pt-20 max-w-[41rem] mx-auto">
       <form
         onSubmit={handleSubmit(handleCreateNewCycle)}
         className="flex flex-col gap-14 justify-center items-center"
       >
-        <div className="w-full flex items-center justify-center gap-2 text-gray-100 text-xl font-bold flex-wrap">
+        <div className="w-full flex items-center justify-center gap-2 text-gray-100 text-base font-bold flex-wrap">
           <label htmlFor="">Vou trabalhar em</label>
           <input
             type="text"
             placeholder="Dê um nome para o seu projeto"
             list="task-suggestions"
-            className="flex-1 bg-transparent h-10 border-b-[2px] border-b-gray-500 font-bold text-xl px-2 text-gray-100 focus:shadow-none focus:border-b-green-500 placeholder:text-gray-500 none"
+            className="flex-1 bg-transparent h-10 border-b-[2px] border-b-gray-500 font-bold text-sm px-2 text-gray-100 focus:shadow-none focus:border-b-green-500 placeholder:text-gray-500 none"
             {...register('task')}
           />
           <datalist id="task-suggestions">
@@ -41,7 +52,7 @@ export function Home() {
             max={60}
             step="5"
             placeholder="00"
-            className="bg-transparent h-10 border-b-[2px] border-b-gray-500 font-bold text-xl px-2 text-gray-100 w-16 focus:shadow-none focus:border-b-green-500 placeholder:text-gray-500"
+            className="bg-transparent h-10 border-b-[2px] border-b-gray-500 font-bold text-sm px-2 text-gray-100 w-16 focus:shadow-none focus:border-b-green-500 placeholder:text-gray-500"
             {...register('minutesAmount')}
           />
           <span>minutos.</span>
@@ -57,6 +68,7 @@ export function Home() {
         </div>
         <button
           type="submit"
+          disabled={isSubmitDisabled}
           className="flex items-center justify-center gap-2 bg-green-500 w-full px-10 py-4 text-gray-100 rounded-lg font-bold hover:bg-green-700 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-green-500"
         >
           <Play size={24} />
