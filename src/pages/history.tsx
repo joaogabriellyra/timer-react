@@ -1,6 +1,12 @@
+import { useContext } from 'react'
 import { StatusIndicator } from '../components/ui/status-indicator'
+import { CyclesContext } from '../contexts/cycles-context'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export function History() {
+  const { cycles } = useContext(CyclesContext)
+
   return (
     <div className="flex-1 p-14 flex flex-col">
       <h1 className="text-2xl font-bold font-mono mb-8 text-gray-100">
@@ -21,76 +27,44 @@ export function History() {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 1
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">2h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">10:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Concluído" statusColor="green" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 2
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">1h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">11:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Em progresso" statusColor="yellow" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 2
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">1h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">11:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Em progresso" statusColor="yellow" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 2
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">1h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">11:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Em progresso" statusColor="yellow" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 2
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">1h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">11:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Em progresso" statusColor="yellow" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 2
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">1h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">11:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Interrompido" statusColor="red" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-800">
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
-                Nome da Tarefa 2
-              </td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">1h</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm">11:00</td>
-              <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
-                <StatusIndicator message="Concluído" statusColor="green" />
-              </td>
-            </tr>
+            {cycles?.map(cycle => {
+              return (
+                <tr key={cycle.id} className="bg-zinc-800">
+                  <td className="p-4 border-t-4 border-zinc-900 text-sm pl-6">
+                    {cycle.task}
+                  </td>
+                  <td className="p-4 border-t-4 border-zinc-900 text-sm">
+                    {`${cycle.minutesAmount} minutos`}
+                  </td>
+                  <td className="p-4 border-t-4 border-zinc-900 text-sm">
+                    {formatDistanceToNow(new Date(cycle.startDate), {
+                      addSuffix: true,
+                      locale: ptBR,
+                    })}
+                  </td>
+                  <td className="p-4 border-t-4 border-zinc-900 text-sm pr-6">
+                    {cycle.finishedDate && (
+                      <StatusIndicator
+                        message="Concluído"
+                        statusColor="green"
+                      />
+                    )}
+                    {cycle.interruptedDate && (
+                      <StatusIndicator
+                        message="Interrompido"
+                        statusColor="red"
+                      />
+                    )}
+                    {!cycle.finishedDate && !cycle.interruptedDate && (
+                      <StatusIndicator
+                        message="Em progresso"
+                        statusColor="yellow"
+                      />
+                    )}
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
