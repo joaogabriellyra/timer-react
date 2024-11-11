@@ -47,21 +47,20 @@ export function CyclesContextProvider({
     {
       cycles: [],
       activeCycleId: null,
-    }
-    // initialState => { atleast for now the usereducer is not initializing the cycle state
-    //   const cyclesToBeRendered = localStorage.getItem(
-    //     '@ignite-timer:cycles-state-1.0.0'
-    //   )
+    },
+    initialState => {
+      const cyclesToBeRendered = localStorage.getItem(
+        '@ignite-timer:cycles-state-1.0.0'
+      )
 
-    //   if (cyclesToBeRendered) {
-    //     return JSON.parse(cyclesToBeRendered)
-    //   }
-    //   return initialState
-    // }
+      if (cyclesToBeRendered) {
+        // return JSON.parse(cyclesToBeRendered)
+      }
+      return initialState
+    }
   )
 
   const { cycles, activeCycleId } = cyclesState
-  console.log(cycles)
   const activeCycle = cycles.find(cycle => cycle.id === activeCycleId)
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
